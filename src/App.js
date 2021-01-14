@@ -7,6 +7,8 @@ function App() {
 
   const [htmlTextArea, setHtmlTextArea] = useState("");
 
+  const [iframRender, setIframRender] = useState();
+
   const handleOnChange = (event) => {
     setHtmlTextArea(event.target.value);
   };
@@ -14,9 +16,10 @@ function App() {
   useEffect(() => {
     let parser = new DOMParser();
     let doc = parser.parseFromString({ htmlTextArea }, "text/html");
-    let doc_2 = JSON.stringify(doc);
+    console.log(doc);
+    setIframRender("http://www.youtube.com/embed/xDMP3i36naA");
 
-  });
+  },[]);
 
   // Todo:
 
@@ -35,7 +38,7 @@ function App() {
         </footer>
       </div>
       <p>{htmlTextArea}</p>
-      <iframe src={htmlTextArea}
+      <iframe src={iframRender}
         width="1450px"
         height="450px"
         display="initial"
