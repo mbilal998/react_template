@@ -19,7 +19,7 @@ function App() {
     console.log(doc);
     setIframRender("http://www.youtube.com/embed/xDMP3i36naA");
 
-  },[]);
+  });
 
   // Todo:
 
