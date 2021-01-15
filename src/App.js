@@ -7,21 +7,24 @@ function App() {
 
   const [htmlTextArea, setHtmlTextArea] = useState("");
 
-  const [iframRender, setIframRender] = useState();
-
   const handleOnChange = (event) => {
-    setHtmlTextArea(event.target.value);
+    const text_1 = JSON.stringify(event.target.value);
+    const text_2 = "<h1>This is a Heading</h1>\n<p>This is a paragraph.</p><p></p>".endsWith('<p></p>');
+    //const text_2 = text_1.endsWith("<p></p>");
+    console.log(text_2);
+    let text_3;
+    if (text_2) {
+      text_3 = text_1.replace(/<[^/>][^>]*><\/[^>]+>/, "");
+    }
+    setHtmlTextArea(text_3);
   };
 
   useEffect(() => {
-    let parser = new DOMParser();
-    let doc = parser.parseFromString({ htmlTextArea }, "text/html");
-    console.log(doc);
-    setIframRender("http://www.youtube.com/embed/xDMP3i36naA");
-
+    let doc = document.getElementById("FileFrame").contentWindow.document;
+    doc.open();
+    doc.write(`${htmlTextArea}`);
+    doc.close();
   });
-
-  // Todo:
 
   return (
     <div>
@@ -37,12 +40,12 @@ function App() {
           </div>
         </footer>
       </div>
-      <p>{htmlTextArea}</p>
-      <iframe src={iframRender}
-        width="1450px"
-        height="450px"
-        display="initial"
-        position="relative"
+      <iframe
+        id="FileFrame"
+        src="{htmlTextArea}"
+        frameBorder="0"
+        width="100%"
+        height="500px"
       />
     </div>
   );
