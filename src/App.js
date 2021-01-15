@@ -8,15 +8,19 @@ function App() {
   const [htmlTextArea, setHtmlTextArea] = useState("");
 
   const handleOnChange = (event) => {
-    const text_1 = JSON.stringify(event.target.value);
-    const text_2 = "<h1>This is a Heading</h1>\n<p>This is a paragraph.</p><p></p>".endsWith('<p></p>');
-    //const text_2 = text_1.endsWith("<p></p>");
-    console.log(text_2);
-    let text_3;
-    if (text_2) {
-      text_3 = text_1.replace(/<[^/>][^>]*><\/[^>]+>/, "");
+    const doc = new DOMParser().parseFromString(
+      event.target.value,
+      "text/html"
+    );
+    const body = doc.body.lastElementChild.children;
+    
+    console.log(body);
+
+    for (let x = body.length - 1; x >= 0; x--) {
+      if (body.item(x).innerHTML.length > 0) break;
+      if (body.item(x).innerHTML.length === 0) body.item(x).remove();
     }
-    setHtmlTextArea(text_3);
+    setHtmlTextArea(doc.body.outerHTML);
   };
 
   useEffect(() => {
@@ -34,19 +38,12 @@ function App() {
           <div className="View-editable" id="gethtml">
             <textarea
               type="text"
-              value=""
               onChange={(event) => handleOnChange(event)}
             ></textarea>
           </div>
         </footer>
       </div>
-      <iframe
-        id="FileFrame"
-        src="{htmlTextArea}"
-        frameBorder="0"
-        width="100%"
-        height="500px"
-      />
+      <iframe title="textareaTask" id="FileFrame" src="{htmlTextArea}" frameBorder="2" width="100%" height="500px"/>
     </div>
   );
 }
